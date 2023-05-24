@@ -90,10 +90,10 @@
         - rexp: ansible \\
           rplc: python38 \\
 
-    - name: Add nmap install to Dockerfile
+    - name: Add nmap and wget install to Dockerfile
       lineinfile:
         path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
-        line: "    nmap \\"
+        line: "    nmap \\\n    wget \\"
         insertafter: "which"
 
 #    - name: Add sshpass install to Dockerfile
@@ -101,12 +101,6 @@
 #        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
 #        line: "    sshpass \\"
 #        insertafter: "which"
-
-    - name: Add wget install to Dockerfile
-      lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
-        line: "    wget \\"
-        insertafter: "which"
 
     - name: Add download cmd of sshpass rpm
       lineinfile:
