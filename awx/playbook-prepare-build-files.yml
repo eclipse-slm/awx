@@ -96,11 +96,29 @@
         line: "    nmap \\"
         insertafter: "which"
 
-    - name: Add sshpass install to Dockerfile
+#    - name: Add sshpass install to Dockerfile
+#      lineinfile:
+#        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+#        line: "    sshpass \\"
+#        insertafter: "which"
+
+    - name: Add wget install to Dockerfile
       lineinfile:
         path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
-        line: "    sshpass \\"
+        line: "    wget \\"
         insertafter: "which"
+
+    - name: Add download cmd of sshpass rpm
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "RUN wget http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/sshpass-1.09-4.el8.x86_64.rpm"
+        insertbefore: "# Install kubectl"
+
+    - name: Add run of sshpass install
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "RUN rpm -i sshpass-1.09-4.el8.x86_64.rpm"
+        insertbefore: "# Install kubectl"
 
     - name: Add ARG for awx host to Dockerfile
       lineinfile:
