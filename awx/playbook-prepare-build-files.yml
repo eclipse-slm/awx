@@ -1,0 +1,168 @@
+---
+- name: Prepare AWX Build files
+  hosts: localhost
+  vars:
+    - awx_installer_path: "/tmp/project/awx/installer"
+  tasks:
+    - name: Ensure dependencies are installed.
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Add Docker apt key.
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository.
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+        update_cache: true
+
+    - name: Install Docker.
+      apt:
+        pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+
+    - name: Remove dockerhub_base
+      replace:
+        path: "{{awx_installer_path}}/inventory"
+        regexp: 'dockerhub_base='
+        replace: '# dockerhub_base='
+
+#    - name: Add awx files to build image
+#      lineinfile:
+#        path: "{{awx_installer_path}}/roles/image_build/files/Dockerfile.sdist"
+#        line: ADD /tmp/project/awx /awx
+#        insertbefore: 'WORKDIR'
+
+#    - name: Add awx files to build image
+#      lineinfile:
+#        path: "{{awx_installer_path}}/roles/image_build/files/Dockerfile.sdist"
+#        line: RUN cd / && git clone https://github.com/ansible/awx.git && cd awx && git checkout tags/13.0.0
+#        insertbefore: 'WORKDIR'
+#
+#    - name: Remove volume in run command of build container
+#      lineinfile:
+#        path: "{{awx_installer_path}}/roles/image_build/tasks/main.yml"
+#        regexp: '\.\./:/awx:Z'
+#        state: absent
+
+    - name: Fix End of life error of centos 8
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*"
+        insertafter: "USER root"
+        firstmatch: "{{ item }}"
+      loop:
+        - no
+        - yes
+
+    - name: Replace python 3.6 with 3.8
+      replace:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        regexp: '{{ item.rexp }}'
+        replace: '{{ item.rplc }}'
+      loop:
+        - rexp: python3-devel
+          rplc: python38-devel
+        - rexp: python3-pip
+          rplc: python38-pip
+        - rexp: python3-psycopg2
+          rplc: python38-psycopg2
+        - rexp: python3-setuptools
+          rplc: python38-setuptools
+        - rexp: /venv/awx/lib/python3.6
+          rplc: /venv/awx/lib/python3.8
+        - rexp: dnf -y install ansible
+          rplc: dnf -y install
+        - rexp: ansible \\
+          rplc: python38 \\
+
+    - name: Add nmap install to Dockerfile
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "    nmap \\"
+        insertafter: "which"
+
+    - name: Add sshpass install to Dockerfile
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "    sshpass \\"
+        insertafter: "which"
+
+    - name: Add ARG for awx host to Dockerfile
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        line: "ARG HOST_IP_ADDR"
+        insertafter: "ARG"
+
+    - name: Add python-nmap installation via pip3 to Dockerfile
+      replace:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        regexp: 'pip3 install'
+        replace: 'pip3 install python-nmap'
+        after: 'Install runtime requirements'
+
+    - name: Add python-consul2 installation via pip3 to Dockerfile
+      replace:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        regexp: 'pip3 install'
+        replace: 'pip3 install python-consul2 hvac'
+        after: 'Install runtime requirements'
+
+    - name: Fix typing of 'PowerTools'
+      replace:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        regexp: 'PowerTools'
+        replace: 'powertools'
+
+    - name: Remove Install of ansible via dnf
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        insertafter: 'dnf -y clean all'
+        line: 'RUN dnf -y remove ansible'
+
+    - name: Add Upgrade of pip
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        insertbefore: '# Install kubectl'
+        line: 'RUN python3 -m pip install --upgrade pip'
+
+    - name: Add missing packages via yum
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        insertbefore: 'ENV HOME="/var/lib/awx"'
+        line: 'RUN yum install -y libpq-devel gcc python38-devel.x86_64'
+
+    - name: Add install of ansible via pip
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        insertbefore: 'ENV HOME="/var/lib/awx"'
+        line: 'RUN python3 -m pip install psycopg2-binary supervisor ansible'
+
+    - name: Disable when option for downloading collections/roles in projects
+      lineinfile:
+        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        insertbefore: 'ENV HOME="/var/lib/awx"'
+        line: "{{ item }}"
+      loop:
+        - 'RUN sed -i "/when: roles_enabled/c\#when: roles_enabled" /var/lib/awx/venv/awx/lib/python3.8/site-packages/awx/playbooks/project_update.yml'
+        - 'RUN sed -i "/- collections_enabled/c\#- collections_enabled" /var/lib/awx/venv/awx/lib/python3.8/site-packages/awx/playbooks/project_update.yml'
+
+    - name: Enable Use_container_for_build
+      replace:
+        path: "{{awx_installer_path}}/inventory"
+        regexp: '# use_container_for_build=true'
+        replace: 'use_container_for_build=false'
