@@ -21,7 +21,7 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build AWX
         env:
-          DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/base:15.01
+          DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/base:15.0.1
         run: |
           echo "Building AWX 15.0.1 as Docker Image '$DOCKER_IMAGE'"
           cd awx
