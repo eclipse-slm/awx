@@ -2,7 +2,7 @@
 - name: Prepare AWX Build files
   hosts: localhost
   vars:
-    - awx_installer_path: "/tmp/project/awx/"
+    - awx_installer_path: "/tmp/project/awx"
   tasks:
     - name: Ensure dependencies are installed.
       apt:
@@ -61,7 +61,7 @@
 
     - name: Fix End of life error of centos 8
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         line: "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*"
         insertafter: "USER root"
         firstmatch: "{{ item }}"
@@ -71,7 +71,7 @@
 
     - name: Replace python 3.6 with 3.8
       replace:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         regexp: '{{ item.rexp }}'
         replace: '{{ item.rplc }}'
       loop:
@@ -92,81 +92,81 @@
 
     - name: Add nmap and wget install to Dockerfile
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         line: "    nmap \\\n    wget \\"
         insertafter: "which"
 
 #    - name: Add sshpass install to Dockerfile
 #      lineinfile:
-#        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+#        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
 #        line: "    sshpass \\"
 #        insertafter: "which"
 
     - name: Add download cmd of sshpass rpm
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         line: "RUN wget http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/sshpass-1.09-4.el8.x86_64.rpm"
         insertbefore: "# Install kubectl"
 
     - name: Add run of sshpass install
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         line: "RUN rpm -i sshpass-1.09-4.el8.x86_64.rpm"
         insertbefore: "# Install kubectl"
 
     - name: Add ARG for awx host to Dockerfile
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         line: "ARG HOST_IP_ADDR"
         insertafter: "ARG"
 
     - name: Add python-nmap installation via pip3 to Dockerfile
       replace:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         regexp: 'pip3 install'
         replace: 'pip3 install python-nmap'
         after: 'Install runtime requirements'
 
     - name: Add python-consul2 installation via pip3 to Dockerfile
       replace:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         regexp: 'pip3 install'
         replace: 'pip3 install python-consul2 hvac'
         after: 'Install runtime requirements'
 
     - name: Fix typing of 'PowerTools'
       replace:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         regexp: 'PowerTools'
         replace: 'powertools'
 
     - name: Remove Install of ansible via dnf
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         insertafter: 'dnf -y clean all'
         line: 'RUN dnf -y remove ansible'
 
     - name: Add Upgrade of pip
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         insertbefore: '# Install kubectl'
         line: 'RUN python3 -m pip install --upgrade pip'
 
     - name: Add missing packages via yum
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         insertbefore: 'ENV HOME="/var/lib/awx"'
         line: 'RUN yum install -y libpq-devel gcc python38-devel.x86_64'
 
     - name: Add install of ansible via pip
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         insertbefore: 'ENV HOME="/var/lib/awx"'
         line: 'RUN python3 -m pip install psycopg2-binary supervisor ansible'
 
     - name: Disable when option for downloading collections/roles in projects
       lineinfile:
-        path: "{{awx_installer_path}}/roles/image_build/templates/Dockerfile.j2"
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
         insertbefore: 'ENV HOME="/var/lib/awx"'
         line: "{{ item }}"
       loop:
