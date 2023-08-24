@@ -21,13 +21,13 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build AWX
         env:
-          DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/base:15.0.1
+          DOCKER_IMAGE: ghcr.io/ilgmi/awx/base:22.0.7
         run: |
-          echo "Building AWX 15.0.1 as Docker Image '$DOCKER_IMAGE'"
+          echo "Building AWX 22.0.7 as Docker Image '$DOCKER_IMAGE'"
           cd awx
-          docker build --build-arg ANSIBLE_AWX_GIT_TAG=15.0.1 -t awx-builder:latest .
-          docker run --name awx-builder -v /var/run/docker.sock:/var/run/docker.sock -e "ANSIBLE_AWX_GIT_TAG=15.0.1" --rm awx-builder:latest
-          docker tag awx:15.0.1 $DOCKER_IMAGE
+          docker build --build-arg ANSIBLE_AWX_GIT_TAG=22.0.7 -t awx-builder:latest .
+          docker run --name awx-builder -v /var/run/docker.sock:/var/run/docker.sock -e "ANSIBLE_AWX_GIT_TAG=22.0.7" --rm awx-builder:latest
+          docker tag awx:22.0.7 $DOCKER_IMAGE
           docker push $DOCKER_IMAGE
       - name: Build AWX Redis
         env:
