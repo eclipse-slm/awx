@@ -175,6 +175,6 @@
 
     - name: Enable Use_container_for_build
       replace:
-        path: "{{awx_installer_path}}/inventory"
+        path: "{{awx_installer_path}}/tools/docker-compose/inventory"
         regexp: '# use_container_for_build=true'
         replace: 'use_container_for_build=false'
