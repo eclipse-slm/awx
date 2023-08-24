@@ -34,7 +34,7 @@ RUN git clone https://github.com/ansible/awx.git && \
 
 RUN ansible-playbook playbook-prepare-build-files.yml
 
-WORKDIR /tmp/project/awx/installer
+WORKDIR /tmp/project/awx/
 
 CMD make docker-compose-build
 #CMD ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml
