@@ -2,7 +2,7 @@
 - name: Prepare AWX Build files
   hosts: localhost
   vars:
-    - awx_installer_path: "/tmp/project/awx/installer"
+    - awx_installer_path: "/tmp/project/awx/"
   tasks:
     - name: Ensure dependencies are installed.
       apt:
