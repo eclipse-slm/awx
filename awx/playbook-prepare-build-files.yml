@@ -37,7 +37,7 @@
 
     - name: Remove dockerhub_base
       replace:
-        path: "{{awx_installer_path}}/inventory"
+        path: "{{awx_installer_path}}/tools/docker-compose/inventory"
         regexp: 'dockerhub_base='
         replace: '# dockerhub_base='
 
