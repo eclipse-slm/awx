@@ -36,4 +36,5 @@ RUN ansible-playbook playbook-prepare-build-files.yml
 
 WORKDIR /tmp/project/awx/installer
 
-CMD ansible-playbook -i inventory build.yml
+CMD make docker-compose-build
+#CMD ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml
