@@ -36,5 +36,5 @@ RUN ansible-playbook playbook-prepare-build-files.yml
 
 WORKDIR /tmp/project/awx/
 
-CMD make docker-compose-build  DEVEL_IMAGE_NAME=ghcr.io/ilgmi/awx/base:22.7.0
-#CMD ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml
+
+CMD make docker-compose-build  DEVEL_IMAGE_NAME=awx_devel:head
