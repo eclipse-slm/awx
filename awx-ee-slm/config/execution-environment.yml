@@ -1,0 +1,7 @@
+---
+version: 3
+
+dependencies:
+  galaxy: requirements.yml
+  system: bindep.txt
+  python: requirements.txt

@@ -10,9 +10,8 @@ RUN virtualenv .venvpy3
 
 RUN pip install ansible-builder
 
-ADD execution-environment.yml /tmp/project/
+ADD config/* /tmp/project/
 ADD playbook-prepare-build-files.yml /tmp/project/
-ADD requirements.yml /tmp/project/
 
 RUN ansible-playbook playbook-prepare-build-files.yml
 
