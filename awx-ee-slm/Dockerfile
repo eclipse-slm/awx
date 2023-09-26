@@ -16,4 +16,4 @@ ADD requirements.yml /tmp/project/
 
 RUN ansible-playbook playbook-prepare-build-files.yml
 
-CMD ansible-builder build --tag=awx_ee_slm_devel:latest --container-runtime=docker --verbosity=3
+CMD ansible-builder build  -v3 --tag=awx_ee_slm_devel:latest --container-runtime=docker --verbosity=3
