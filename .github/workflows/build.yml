@@ -33,8 +33,8 @@ jobs:
         env:
           DOCKER_IMAGE: ghcr.io/ilgmi/awx-ee-slm
         run: |
-          echo "Building custom AWX-EE "
-          cd awx
+          echo "Building custom AWX-EE-SLM "
+          cd awx-ee-slm
           docker build -t awx-ee-slm-builder:latest .
            docker run --name awx-ee-slm-builder -v /var/run/docker.sock:/var/run/docker.sock  --rm awx-ee-slm-builder:latest
           docker tag awx_ee_slm_devel:head $DOCKER_IMAGE
