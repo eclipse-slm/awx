@@ -70,26 +70,26 @@
 #        - no
 #        - yes
 #
-#    - name: Replace python 3.6 with 3.8
-#      replace:
-#        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
-#        regexp: '{{ item.rexp }}'
-#        replace: '{{ item.rplc }}'
-#      loop:
-#        - rexp: python3-devel
-#          rplc: python38-devel
-#        - rexp: python3-pip
-#          rplc: python38-pip
-#        - rexp: python3-psycopg2
-#          rplc: python38-psycopg2
-#        - rexp: python3-setuptools
-#          rplc: python38-setuptools
-#        - rexp: /venv/awx/lib/python3.6
-#          rplc: /venv/awx/lib/python3.8
-#        - rexp: dnf -y install ansible
-#          rplc: dnf -y install
-#        - rexp: ansible \\
-#          rplc: python38 \\
+    - name: Replace python 3.6 with 3.8
+      replace:
+        path: "{{awx_installer_path}}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2"
+        regexp: '{{ item.rexp }}'
+        replace: '{{ item.rplc }}'
+      loop:
+        - rexp: python3-devel
+          rplc: python38-devel
+        - rexp: python3-pip
+          rplc: python38-pip
+        - rexp: python3-psycopg2
+          rplc: python38-psycopg2
+        - rexp: python3-setuptools
+          rplc: python38-setuptools
+        - rexp: /venv/awx/lib/python3.6
+          rplc: /venv/awx/lib/python3.8
+        - rexp: dnf -y install ansible
+          rplc: dnf -y install
+        - rexp: ansible \\
+          rplc: python38 \\
 #
 #    - name: Add nmap and wget install to Dockerfile
 #      lineinfile:

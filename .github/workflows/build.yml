@@ -29,6 +29,16 @@ jobs:
           docker run --name awx-builder -v /var/run/docker.sock:/var/run/docker.sock -e "ANSIBLE_AWX_GIT_TAG=22.7.0" --rm awx-builder:latest
           docker tag awx_devel:head $DOCKER_IMAGE
           docker push $DOCKER_IMAGE
+      - name: Build AWX-EE
+        env:
+          DOCKER_IMAGE: ghcr.io/ilgmi/awx-ee-slm
+        run: |
+          echo "Building custom AWX-EE "
+          cd awx
+          docker build -t awx-ee-slm-builder:latest .
+           docker run --name awx-ee-slm-builder -v /var/run/docker.sock:/var/run/docker.sock  --rm awx-ee-slm-builder:latest
+          docker tag awx_ee_slm_devel:head $DOCKER_IMAGE
+          docker push $DOCKER_IMAGE
       - name: Build AWX Redis
         env:
           DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/redis:6
