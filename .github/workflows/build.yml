@@ -28,7 +28,7 @@ jobs:
           cd awx
           docker build --build-arg ANSIBLE_AWX_GIT_TAG=$AWX_VERSION -t awx-builder:latest .
           docker run --name awx-builder -v /var/run/docker.sock:/var/run/docker.sock -e "ANSIBLE_AWX_GIT_TAG='$AWX_VERSION'" --rm awx-builder:latest
-          docker tag awx_devel:head $DOCKER_IMAGE
+          docker tag awx_devel:$AWX_VERSION $DOCKER_IMAGE:$AWX_VERSION
           docker push $DOCKER_IMAGE:$AWX_VERSION
       - name: Build AWX Redis
         env:

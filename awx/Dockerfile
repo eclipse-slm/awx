@@ -37,4 +37,4 @@ RUN ansible-playbook playbook-prepare-build-files.yml
 WORKDIR /tmp/project/awx/
 
 
-CMD make docker-compose-build  DEVEL_IMAGE_NAME=awx_devel:head
+CMD make docker-compose-build  DEVEL_IMAGE_NAME=awx_devel:$ANSIBLE_AWX_GIT_TAG
