@@ -24,12 +24,13 @@ jobs:
           AWX_VERSION: 22.7.0
           DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/awx/base
         run: |
+          docker_image_lowercase=$(echo "'$DOCKER_IMAGE':'$AWX_VERSION'" | tr '[:upper:]' '[:lower:]')
           echo "Building AWX '$AWX_VERSION' as Docker Image '$DOCKER_IMAGE'"
           cd awx
           docker build --build-arg ANSIBLE_AWX_GIT_TAG=$AWX_VERSION -t awx-builder:latest .
           docker run --name awx-builder -v /var/run/docker.sock:/var/run/docker.sock -e "ANSIBLE_AWX_GIT_TAG='$AWX_VERSION'" --rm awx-builder:latest
-          docker tag awx_devel:$AWX_VERSION $DOCKER_IMAGE:$AWX_VERSION
-          docker push $DOCKER_IMAGE:$AWX_VERSION
+          docker tag awx_devel:$AWX_VERSION $docker_image_lowercase
+          docker push $docker_image_lowercase
       - name: Build AWX Redis
         env:
           DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/redis:6
