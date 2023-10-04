@@ -33,11 +33,12 @@ jobs:
           docker push $docker_image_lowercase
       - name: Build AWX Redis
         env:
-          DOCKER_IMAGE: ghcr.io/eclipse-slm/awx/redis:6
+          DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/awx/redis:6
         run: |
+          docker_image_lowercase=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')
           cd awx-redis
-          docker build -t $DOCKER_IMAGE .
-          docker push $DOCKER_IMAGE
+          docker build -t $docker_image_lowercase .
+          docker push $docker_image_lowercase
   build-and-push-awx-ee-slm:
     runs-on: ubuntu-latest
     permissions:
