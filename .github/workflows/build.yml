@@ -24,7 +24,7 @@ jobs:
           AWX_VERSION: 22.7.0
           DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/awx/base
         run: |
-          docker_image_lowercase=$(echo "'$DOCKER_IMAGE':'$AWX_VERSION'" | tr '[:upper:]' '[:lower:]')
+          docker_image_lowercase=$(echo "$DOCKER_IMAGE:$AWX_VERSION" | tr '[:upper:]' '[:lower:]')
           echo "Building AWX '$AWX_VERSION' as Docker Image '$DOCKER_IMAGE'"
           cd awx
           docker build --build-arg ANSIBLE_AWX_GIT_TAG=$AWX_VERSION -t awx-builder:latest .
@@ -55,7 +55,7 @@ jobs:
         env:
           DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/awx-ee-slm
         run: |
-          docker_image_lowercase=$(echo "'$DOCKER_IMAGE'" | tr '[:upper:]' '[:lower:]')
+          docker_image_lowercase=$(echo "$DOCKER_IMAGE" | tr '[:upper:]' '[:lower:]')
           echo "Building custom AWX-EE-SLM "
           cd awx-ee-slm
           docker build -t awx-ee-slm-builder:latest .
