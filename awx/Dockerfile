@@ -34,6 +34,7 @@ RUN git clone https://github.com/ansible/awx.git && \
 
 RUN ansible-playbook playbook-prepare-build-files.yml
 
-WORKDIR /tmp/project/awx/installer
+WORKDIR /tmp/project/awx/
 
-CMD ansible-playbook -i inventory build.yml
+
+CMD make docker-compose-build  DEVEL_IMAGE_NAME=awx_devel:$ANSIBLE_AWX_GIT_TAG
