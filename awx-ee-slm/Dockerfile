@@ -10,6 +10,7 @@ RUN virtualenv .venvpy3
 
 RUN pip install ansible-builder
 
+# Files in config folder specify the configuration of the final awx-ee image
 ADD config/* /tmp/project/
 ADD playbook-prepare-build-files.yml /tmp/project/
 
