@@ -1,6 +1,8 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 WORKDIR /tmp/project
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Make Dependecies for AWX Build from Dockerfile.sdist:
 RUN apt update && \
@@ -8,12 +10,13 @@ RUN apt update && \
 
 RUN virtualenv .venvpy3
 
-RUN pip install ansible-builder
+RUN pip install ansible-builder==3.0.0
 
-# Files in config folder specify the configuration of the final awx-ee image
-ADD config/* /tmp/project/
 ADD playbook-prepare-build-files.yml /tmp/project/
 
 RUN ansible-playbook playbook-prepare-build-files.yml
+
+# Files in config folder specify the configuration of the final awx-ee image
+ADD config/* /tmp/project/
 
 CMD ansible-builder build  -v3 --tag=awx_ee_slm_devel:latest --container-runtime=docker
