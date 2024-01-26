@@ -2,5 +2,8 @@
 version: 3
 
 dependencies:
+  system: bindep.txt
+  ansible_runner:
+    package_pip: ansible-runner==2.3.4
   galaxy: requirements.yml
   python: requirements.txt
