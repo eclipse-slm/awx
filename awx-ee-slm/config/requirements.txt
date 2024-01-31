@@ -11,3 +11,5 @@ pyyaml
 six
 cryptography>=35.0,<37.0.0
 pyopenssl>=20.0.0
+boto3
+botocore
