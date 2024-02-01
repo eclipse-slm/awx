@@ -23,7 +23,7 @@ collections:
   - name: community.general
     source: "https://github.com/ansible-collections/community.general.git"
     type: git
-    version: 7.4.0
+    version: 7.5.0
   - name: community.docker
   - name: kubernetes.core
     source: "https://github.com/ansible-collections/kubernetes.core.git"

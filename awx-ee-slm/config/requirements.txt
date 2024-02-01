@@ -9,9 +9,10 @@ pexpect>=4.5
 python-daemon
 pyyaml
 six
-cryptography>=35.0,<37.0.0
-pyopenssl>=20.0.0
+cryptography
+pyopenssl>=24.0.0
+python-openstackclient
+openstacksdk
+python-consul
 botocore>=1.29.0
 boto3>=1.26.0
-pyOpenSSL
-receptorctl
