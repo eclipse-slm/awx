@@ -2,5 +2,7 @@
 version: 3
 
 dependencies:
+  python_interpreter:
+    package_system: python39
   galaxy: requirements.yml
   python: requirements.txt
