@@ -14,3 +14,5 @@ pyopenssl>=24.0.0
 python-openstackclient
 openstacksdk
 python-consul
+botocore
+boto3
