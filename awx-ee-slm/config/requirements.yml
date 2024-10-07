@@ -5,14 +5,14 @@ collections:
   - name: amazon.aws
     source: "https://github.com/ansible-collections/amazon.aws.git"
     type: git
-    version: 7.2.0
+    version: "7.2.0"
   - name: theforeman.foreman
   - name: google.cloud
   - name: openstack.cloud
   - name: community.vmware
     source: "https://github.com/ansible-collections/community.vmware.git"
     type: git
-    version: 3.9.0
+    version: "3.9.0"
   - name: ovirt.ovirt
   - name: kubernetes.core
   - name: ansible.posix
@@ -23,12 +23,12 @@ collections:
   - name: community.general
     source: "https://github.com/ansible-collections/community.general.git"
     type: git
-    version: 7.5.0
+    version: "9.4.0"
   - name: community.docker
   - name: kubernetes.core
     source: "https://github.com/ansible-collections/kubernetes.core.git"
     type: git
-    version: 2.3.2
+    version: "2.3.2"
   - name: ansible_aas
     source: "https://github.com/Ilgmi/ansible_aas"
     type: git
