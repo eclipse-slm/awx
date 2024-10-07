@@ -3,7 +3,8 @@ name: Build
 on:
   push:
     branches:
-      - main
+#      - main
+      - add-aas-collection
 
 jobs:
   build-and-push-awx:
