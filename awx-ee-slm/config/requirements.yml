@@ -32,7 +32,7 @@ collections:
   - name: ansible_aas
     source: "https://github.com/Ilgmi/ansible_aas"
     type: git
-    version: "main"
+    version: "slm-update"
 roles:
   - src: "git+https://github.com/eclipse-slm/slm-ansible-role-node-exporter"
     scm: git
