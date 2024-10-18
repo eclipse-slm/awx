@@ -16,4 +16,4 @@ openstacksdk
 python-consul
 botocore
 boto3
-basyx-python-sdk
+basyx-python-sdk==1.0.0
