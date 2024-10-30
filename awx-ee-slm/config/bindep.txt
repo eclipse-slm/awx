@@ -1,5 +1,4 @@
 git-core [platform:rpm]
-python38-devel [platform:rpm]
 libcurl-devel [platform:rpm]
 libxml2-devel [platform:rpm]
 krb5-devel [platform:rpm compile]
