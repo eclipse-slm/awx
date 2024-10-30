@@ -30,9 +30,9 @@ collections:
     type: git
     version: "2.3.2"
   - name: slm.aas
-    source: "https://github.com/Ilgmi/ansible-collection-aas"
+    source: "https://github.com/eclipse-slm/ansible-collection-aas"
     type: git
-    version: "merge-fabos-aas"
+    version: "main"
 roles:
   - src: "git+https://github.com/eclipse-slm/slm-ansible-role-node-exporter"
     scm: git
