@@ -42,6 +42,7 @@ jobs:
 
   build-and-push-images:
     runs-on: ubuntu-latest
+    needs: build-and-push-awx-base-image
     permissions:
       contents: read
       packages: write
