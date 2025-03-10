@@ -1,0 +1,11 @@
+services:
+
+  awx-task:
+    image: ghcr.io/eclipse-slm/awx/awx-task:${AWX_VERSION}
+    build: ../awx-task
+    environment:
+      - AWX_TAG=22.7.0
+
+  awx-postgres:
+    image: ghcr.io/eclipse-slm/awx/awx-postgres:12-awx-${AWX_VERSION}
+    build: ../awx-postgres

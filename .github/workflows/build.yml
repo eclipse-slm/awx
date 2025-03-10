@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push-awx:
+  build-and-push-awx-base-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,6 +39,32 @@ jobs:
           cd awx-redis
           docker build -t $docker_image_lowercase .
           docker push $docker_image_lowercase
+
+  build-and-push-images:
+  runs-on: ubuntu-latest
+  permissions:
+    contents: read
+    packages: write
+  strategy:
+    matrix:
+      service:
+        - awx-task
+        - awx-postgres
+  steps:
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      working-directory: ./stack/build
+      run: $DOCKER_COMPOSE_COMMAND build --no-cache ${{ matrix.service }}
+    - name: Login to Docker Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+    - name: Push docker image
+      working-directory: ./stack/build
+      run: $DOCKER_COMPOSE_COMMAND push ${{ matrix.service }}
+
   build-and-push-awx-ee-slm:
     runs-on: ubuntu-latest
     permissions:
