@@ -1,5 +1,8 @@
 FROM ubuntu:22.04
 
+ENV TZ=Europe/Berlin
+ENV DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /tmp/project
 ARG ANSIBLE_AWX_GIT_TAG
 
@@ -39,3 +42,4 @@ WORKDIR /tmp/project/awx/
 
 
 CMD make docker-compose-build  DEVEL_IMAGE_NAME=awx_devel:$ANSIBLE_AWX_GIT_TAG
+
