@@ -25,11 +25,10 @@ RUN apt update && \
     nodejs \
     npm \
     python3 \
-    python3-setuptools
+    python3-setuptools \
+    python3-docker
 RUN npm install -g n && n 14.15.1 && apt remove -y nodejs
 ENV PATH=/usr/local/n/versions/node/14.15.1/bin:$PATH
-
-RUN pip3 install docker
 
 RUN git clone https://github.com/ansible/awx.git && \
     cd awx && \
