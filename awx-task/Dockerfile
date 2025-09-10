@@ -12,10 +12,11 @@ ENV AWX_SKIP_MIGRATIONS="0" \
     https_proxy="" \
     no_proxy="" \
     SUPERVISOR_WEB_CONFIG_PATH='/etc/supervisord.conf' \
+    NGINX_INTERNAL_DNS_RESOLVER=127.0.0.11 \
     AWX_TAG=22.7.0
 
 COPY conf/ /etc/tower/conf.d/
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY nginx/nginx.locations.conf /etc/nginx/conf.d/nginx.locations.conf
 COPY SECRET_KEY /etc/tower/SECRET_KEY
 COPY receptor/ /etc/receptor/
@@ -45,6 +46,8 @@ RUN make clean-ui ui-devel
 
 RUN cd awx/ui && npx update-browserslist-db@latest
 
-CMD "launch_awx.sh"
+COPY entrypoint.sh /entrypoint.sh
+
+CMD ["sh", "-c", "envsubst '${NGINX_INTERNAL_DNS_RESOLVER}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && launch_awx.sh"]
 
 
