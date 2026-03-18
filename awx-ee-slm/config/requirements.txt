@@ -1,9 +1,4 @@
-git+https://github.com/ansible/ansible-sign
-ncclient
 paramiko
-pykerberos
-pypsrp[kerberos,credssp]
-pywinrm[kerberos,credssp]
 toml
 pexpect>=4.5
 python-daemon
@@ -11,8 +6,6 @@ pyyaml
 six
 cryptography
 pyopenssl>=24.0.0
-python-openstackclient
-openstacksdk
 python-consul
 botocore
 boto3
